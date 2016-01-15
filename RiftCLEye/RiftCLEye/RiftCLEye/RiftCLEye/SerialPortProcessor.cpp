@@ -44,7 +44,7 @@ void CSerialPortProcessor::Start(LPCSTR comPortName, DCB* portConfig)
 			MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
 			(LPTSTR)&lpMsgBuf, 0, NULL);
 
-		MessageBox(NULL, (LPCSTR)lpMsgBuf, NULL, MB_OK);	//メッセージ表示
+		MessageBox(NULL, (LPCWSTR)lpMsgBuf, NULL, MB_OK);	//メッセージ表示
 
 		LocalFree(lpMsgBuf);
 		ExitProcess(dw);

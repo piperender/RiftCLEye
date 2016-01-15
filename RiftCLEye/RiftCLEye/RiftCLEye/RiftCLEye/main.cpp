@@ -23,6 +23,11 @@ limitations under the License.
 /// or pressing any key. 
 /// It runs with DirectX11.
 
+// Add: Disable Unicode warnings
+#pragma warning(disable:4819)
+// Add: CL Eye include file
+#include "global.h"
+
 // Include DirectX
 #include "../../OculusRoomTiny_Advanced/Common/Win32_DirectXAppUtil.h"
 
