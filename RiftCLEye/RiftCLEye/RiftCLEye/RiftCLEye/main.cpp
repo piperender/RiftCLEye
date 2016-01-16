@@ -23,10 +23,9 @@ limitations under the License.
 /// or pressing any key. 
 /// It runs with DirectX11.
 
-// Add: Disable Unicode warnings
-#pragma warning(disable:4819)
-// Add: CL Eye include file
-#include "global.h"
+
+// Add: Inclue CL Eye Camera Capture Class Header
+#include "CLEyeCameraCapture.h"
 
 // Include DirectX
 #include "../../OculusRoomTiny_Advanced/Common/Win32_DirectXAppUtil.h"
@@ -200,6 +199,38 @@ static bool MainLoop(bool retryCreate)
         return retryCreate;
 
     ovrHmdDesc hmdDesc = ovr_GetHmdDesc(HMD);
+
+	// -------------------------------------------------------------------
+	// Add: Make Instance that CL Eye Camera Capture Class
+	CLEyeCameraCapture* cam[2] = { NULL };
+
+	// Query for number of connected camera
+	int numCams = CLEyeGetCameraCount();
+	if (numCams == 0)
+	{
+		printf_s("No PS3Eye Camera detected\n");
+		goto Done;
+	}
+	printf_s("Found %d cameras\n", numCams);
+
+	for (int iCam = 0; iCam < numCams; iCam++)
+	{
+		char windowName[64];
+
+		// Query unique camera uuid
+		GUID guid = CLEyeGetCameraUUID(iCam);
+		printf("Camera %d GUID: [%08x-%04x-%04x-%02x%02x-%02x%02x%02x%02x%02x%02x]\n",
+			iCam + 1, guid.Data1, guid.Data2, guid.Data3,
+			guid.Data4[0], guid.Data4[1], guid.Data4[2],
+			guid.Data4[3], guid.Data4[4], guid.Data4[5],
+			guid.Data4[6], guid.Data4[7]);
+		sprintf_s(windowName, "Camera Window %d", iCam + 1);
+
+		// Create camera capture object
+		cam[iCam] = new CLEyeCameraCapture(windowName, guid, CLEYE_COLOR_RAW, CLEYE_VGA, 30);
+		cam[iCam]->StartCapture();
+	}
+	// -------------------------------------------------------------------
 
 	// Setup Device and Graphics
 	// Note: the mirror window can be any size, for this sample we use 1/2 the HMD resolution
@@ -381,6 +412,12 @@ Done:
 	ovr_Destroy(HMD);
 
 	g_seriPort.End();
+
+	for (int iCam = 0; iCam < numCams; iCam++)
+	{
+		cam[iCam]->StopCapture();
+		delete cam[iCam];
+	}
 
     // Retry on ovrError_DisplayLost
     return retryCreate || OVR_SUCCESS(result) || (result == ovrError_DisplayLost);

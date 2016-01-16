@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\CLEyeCameraCapture.cpp" />
     <ClCompile Include="..\..\..\main.cpp" />
     <ClCompile Include="..\..\..\SerialPortProcessor.cpp" />
     <ClCompile Include="..\..\..\SignalPort.cpp" />
@@ -29,6 +30,7 @@
     <ClInclude Include="..\..\..\SerialPortProcessor.h" />
     <ClInclude Include="..\..\..\SignalPort.h" />
     <ClInclude Include="..\..\..\targetver.h" />
+    <ClInclude Include="CLEyeCameraCapture.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{4D6101BA-A0BE-48E6-992E-19BC74CA69F3}</ProjectGuid>
